@@ -11,8 +11,10 @@ class Window
 		bool broadcast();
 		//Release the window
 		bool release();
-
 		bool isRun();
+
+		RECT getClientWindowSize();
+		void setHWND(HWND hwnd);
 
 		//EVENTS
 		virtual void onCreate();
