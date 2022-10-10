@@ -1,6 +1,5 @@
 #include "Window.h"
 
-Window* window = nullptr;
 
 Window::Window() {}
 Window::~Window() {}
@@ -12,12 +11,16 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 		case WM_CREATE:
 		{
 			// Event fired when the window will be created
+			Window* window = (Window*)((LPCREATESTRUCT)lparam)->lpCreateParams;
+			SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)window);
+
 			window->onCreate();
 			break;
 		}
 		case WM_DESTROY:
 		{
 			// Event fired when the window will be destroyed
+			Window* window = (Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 			window->onDestroy();
 			::PostQuitMessage(0);
 			break;
@@ -46,8 +49,6 @@ bool Window::init()
 
 	if(!::RegisterClassEx(&wc)) // if the registration of class will fail, the function will return false
 		return false;
-	if (!window)
-		window = this;
 	
 	
 	//Creation of the window
@@ -63,7 +64,7 @@ bool Window::init()
 			NULL,
 			NULL,
 			NULL,
-			NULL
+			this
 		);
 	
 	//if the creation fail return false
@@ -90,7 +91,7 @@ bool Window::broadcast()
 		DispatchMessage(&msg);
 	}
 
-	window->onUpdate();
+	this->onUpdate();
 
 	Sleep(0);
 
