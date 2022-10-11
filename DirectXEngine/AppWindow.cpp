@@ -21,6 +21,8 @@ void AppWindow::onCreate()
 
 void AppWindow::onUpdate()
 {
+	GraphicsEngine::get()->getImmediateDeviceContext()->clearRenderTargetColor(this->m_swap_chain, 0, 0.7, 0.7, 1);
+	m_swap_chain->present(false);
 }
 
 void AppWindow::onDestroy()
