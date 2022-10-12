@@ -23,7 +23,7 @@ void DeviceContext::setVertexBuffer(VertexBuffer* vertex_buffer)
 
 	m_device_context->IASetVertexBuffers(0, 1, &vertex_buffer->m_buffer, &stride, &offset);
 
-	m_device_context->IAGetInputLayout(&vertex_buffer->m_layout);
+	m_device_context->IASetInputLayout(vertex_buffer->m_layout);
 }
 
 void DeviceContext::drawTriangleList(UINT vertex_count, UINT start_vertex_index)

@@ -1,7 +1,9 @@
 #pragma once
 #include <d3d11.h>
+#include "VertexBuffer.h"
 
 class SwapChain;
+class VertexBuffer;
 
 class DeviceContext
 {
