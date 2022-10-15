@@ -129,6 +129,10 @@ void Window::onCreate()
 
 }
 
+void Window::onUpdate()
+{
+}
+
 void Window::onDestroy()
 {
 	m_is_run = false;

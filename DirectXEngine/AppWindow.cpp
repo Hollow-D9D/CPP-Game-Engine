@@ -33,8 +33,12 @@ void AppWindow::onCreate()
 	vertex list[] =
 	{
 		{-0.5f, -0.5f, 0.0f},
-		{0.0f, 0.5f, 0.0f},
-		{0.5f, -0.5f, 0.0f}
+		{-0.5f, 0.5f, 0.0f},
+		{0.5f, 0.5f, 0.0f},
+
+		{0.5f, 0.5f, 0.0f},
+		{0.5f, -0.5f, 0.0f},
+		{-0.5f, -0.5f, 0.0f},
 
 	};
 
@@ -44,25 +48,36 @@ void AppWindow::onCreate()
 	GraphicsEngine::get()->createShaders();
 
 	void* shader_byte_code = nullptr;
-	UINT size_shader = 0;
-	GraphicsEngine::get()->getShaderBufferAndSize(&shader_byte_code, &size_shader);
+	size_t size_shader = 0;
 
+	GraphicsEngine::get()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
 
+	m_vs = GraphicsEngine::get()->createVertexShader(shader_byte_code, size_shader);
 	m_vb->load(list, sizeof(vertex), size_list, shader_byte_code, size_shader);
 
+	GraphicsEngine::get()->releaseCompiledShader();
 }
 
 void AppWindow::onUpdate()
 {
+	Window::onUpdate();
+	//CLEAR RENDER TARGET
 	GraphicsEngine::get()->getImmediateDeviceContext()->clearRenderTargetColor(this->m_swap_chain, 0, 0.7, 0.7, 1);
-	m_swap_chain->present(false);
-
+	//m_swap_chain->present(false);
+	
+	//SET VIEWPORT OF RENDER TARGET IN WHICH WE HAVE TO DRAW
 	RECT rc = this->getClientWindowSize();
-
 	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top);
-	GraphicsEngine::get()->setShaders();
 
+	//SET DEFAULT SHADER IN THE GRAPHICS PIPELINE TO BE ABLE TO DRAW
+	GraphicsEngine::get()->setShaders();
+	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexShader(m_vs);
+
+
+	//SET THE VERTICES OF THE TRIANGLE TO DRAW
 	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexBuffer(m_vb);
+	
+	//DRAW THE VERTICES
 	GraphicsEngine::get()->getImmediateDeviceContext()->drawTriangleList(m_vb->getSizeVertexList(), 0);
 	m_swap_chain->present(true);
 }
@@ -73,6 +88,5 @@ void AppWindow::onDestroy()
 	m_vb->release();
 	m_swap_chain->release();
 	GraphicsEngine::get()->release();
-	
 }
 
