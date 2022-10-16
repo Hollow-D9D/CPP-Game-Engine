@@ -10,6 +10,7 @@ struct vec3
 struct vertex
 {
 	vec3 position;
+	vec3 color;
 };
 
 AppWindow::AppWindow()
@@ -32,29 +33,35 @@ void AppWindow::onCreate()
 
 	vertex list[] =
 	{
-		{-0.5f, -0.5f, 0.0f},
-		{-0.5f, 0.5f, 0.0f},
-		{0.5f, 0.5f, 0.0f},
+		{-0.5f, -0.5f, 0.0f, 1, 0, 0},
+		{-0.5f, 0.5f, 0.0f, 0, 1, 0},
+		{0.5f, 0.5f, 0.0f, 0, 0, 1},
 
-		{0.5f, 0.5f, 0.0f},
-		{0.5f, -0.5f, 0.0f},
-		{-0.5f, -0.5f, 0.0f},
+		{0.5f, 0.5f, 0.0f, 0, 0, 1},
+		{0.5f, -0.5f, 0.0f, 1, 0, 1},
+		{-0.5f, -0.5f, 0.0f, 1, 0, 0},
 
 	};
 
 	m_vb = GraphicsEngine::get()->createVertexBuffer();
 	UINT size_list = ARRAYSIZE(list);
 
-	GraphicsEngine::get()->createShaders();
-
 	void* shader_byte_code = nullptr;
 	size_t size_shader = 0;
 
+
+	//VERTEX SHADER
 	GraphicsEngine::get()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
 
 	m_vs = GraphicsEngine::get()->createVertexShader(shader_byte_code, size_shader);
 	m_vb->load(list, sizeof(vertex), size_list, shader_byte_code, size_shader);
 
+	GraphicsEngine::get()->releaseCompiledShader();
+
+	//PIXEL SHADER
+	GraphicsEngine::get()->compilePixelShader(L"PixelShader.hlsl", "psmain", &shader_byte_code, &size_shader);
+
+	m_ps = GraphicsEngine::get()->createPixelShader(shader_byte_code, size_shader);
 	GraphicsEngine::get()->releaseCompiledShader();
 }
 
@@ -70,8 +77,8 @@ void AppWindow::onUpdate()
 	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top);
 
 	//SET DEFAULT SHADER IN THE GRAPHICS PIPELINE TO BE ABLE TO DRAW
-	GraphicsEngine::get()->setShaders();
 	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexShader(m_vs);
+	GraphicsEngine::get()->getImmediateDeviceContext()->setPixelShader(m_ps);
 
 
 	//SET THE VERTICES OF THE TRIANGLE TO DRAW
@@ -87,6 +94,9 @@ void AppWindow::onDestroy()
 	Window::onDestroy();
 	m_vb->release();
 	m_swap_chain->release();
+	m_vs->release();
+	m_ps->release();
+
 	GraphicsEngine::get()->release();
 }
 
