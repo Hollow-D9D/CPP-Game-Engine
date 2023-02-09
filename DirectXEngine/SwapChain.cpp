@@ -5,7 +5,7 @@ SwapChain::SwapChain()
 {
 }
 
-bool SwapChain::init(HWND& hwnd, UINT width, UINT height)
+bool SwapChain::init(HWND hwnd, UINT width, UINT height)
 {
 	ID3D11Device* device = GraphicsEngine::get()->m_d3d_device;
 

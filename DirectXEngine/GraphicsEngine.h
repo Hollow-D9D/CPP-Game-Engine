@@ -8,6 +8,7 @@ class VertexBuffer;
 class ConstantBuffer;
 class VertexShader;
 class PixelShader;
+
 class GraphicsEngine
 {
 public:

@@ -74,6 +74,12 @@ bool GraphicsEngine::init()
 
 bool GraphicsEngine::release()
 {
+    if (m_vs)m_vs->Release();
+    if (m_ps)m_ps->Release();
+
+    if (m_vsblob) m_vsblob->Release();
+    if (m_psblob) m_psblob->Release();
+
     m_dxgi_device->Release();
     m_dxgi_adapter->Release();
     m_dxgi_factory->Release();
@@ -130,7 +136,7 @@ PixelShader* GraphicsEngine::createPixelShader(const void* shader_byte_code, siz
 bool GraphicsEngine::compileVertexShader(const wchar_t* file_name, const char* entry_point_name, void** shader_byte_code, size_t* byte_code_size)
 {
     ID3DBlob* error_blob = nullptr;
-    if (!SUCCEEDED(::D3DCompileFromFile(file_name, nullptr, nullptr, entry_point_name, "vs_5_0", 0, 0, &m_blob, &error_blob)))
+    if (!SUCCEEDED(D3DCompileFromFile(file_name, nullptr, nullptr, entry_point_name, "vs_5_0", 0, 0, &m_blob, &error_blob)))
     {
         if (error_blob) error_blob->Release();
         return false;
@@ -144,7 +150,7 @@ bool GraphicsEngine::compileVertexShader(const wchar_t* file_name, const char* e
 bool GraphicsEngine::compilePixelShader(const wchar_t* file_name, const char* entry_point_name, void** shader_byte_code, size_t* byte_code_size)
 {
     ID3DBlob* error_blob = nullptr;
-    if (!SUCCEEDED(::D3DCompileFromFile(file_name, nullptr, nullptr, entry_point_name, "ps_5_0", 0, 0, &m_blob, &error_blob)))
+    if (!SUCCEEDED(D3DCompileFromFile(file_name, nullptr, nullptr, entry_point_name, "ps_5_0", 0, 0, &m_blob, &error_blob)))
     {
         if (error_blob) error_blob->Release();
         return false;

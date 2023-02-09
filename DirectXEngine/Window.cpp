@@ -56,7 +56,7 @@ bool Window::init()
 			WS_EX_OVERLAPPEDWINDOW,
 			L"MyWindowClass",
 			L"DirectX Application",
-			WS_OVERLAPPEDWINDOW,
+			WS_CAPTION|WS_SYSMENU,
 			CW_USEDEFAULT,
 			CW_USEDEFAULT,
 			1024,
@@ -94,7 +94,7 @@ bool Window::broadcast()
 		DispatchMessage(&msg);
 	}
 
-	Sleep(0);
+	Sleep(1);
 
 	return true;
 }
@@ -112,7 +112,7 @@ bool Window::isRun()
 	return m_is_run;
 }
 
-RECT Window::getClientWindowSize()
+RECT Window::getClientWindowRect()
 {
 	RECT rc;
 	::GetClientRect(this->m_hwnd, &rc);

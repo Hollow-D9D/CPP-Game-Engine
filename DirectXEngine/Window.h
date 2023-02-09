@@ -13,7 +13,7 @@ class Window
 		bool release();
 		bool isRun();
 
-		RECT getClientWindowSize();
+		RECT getClientWindowRect();
 		void setHWND(HWND hwnd);
 
 		//EVENTS
