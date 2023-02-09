@@ -66,5 +66,30 @@ public:
 		m_mat[3][2] = -(near_plane / (far_plane - near_plane));
 	}
 	 
+	void setRotationX(float n)
+	{
+		m_mat[1][1] = cos(n);
+		m_mat[1][2] = sin(n);
+		m_mat[2][1] = -sin(n);
+		m_mat[2][2] = cos(n);
+	}
+
+	void setRotationY(float n)
+	{
+		m_mat[0][0] = cos(n);
+		m_mat[0][2] = -sin(n);
+		m_mat[2][0] = sin(n);
+		m_mat[2][2] = cos(n);
+	}
+
+	void setRotationZ(float n)
+	{
+		m_mat[0][0] = cos(n);
+		m_mat[0][1] = sin(n);
+		m_mat[1][0] = -sin(n);
+		m_mat[1][1] = cos(n);
+	}
+
+
 	~Matrix4x4() {}
 };

@@ -2,14 +2,13 @@
 #include "SwapChain.h"
 #include "DeviceContext.h"
 #include "VertexBuffer.h"
+#include "IndexBuffer.h"
 #include "ConstantBuffer.h"
 #include "VertexShader.h"
 #include "PixelShader.h"
 #include <d3dcompiler.h>
 
-GraphicsEngine::GraphicsEngine()
-{
-}
+GraphicsEngine::GraphicsEngine() {}
 
 VertexShader* GraphicsEngine::createVertexShader(const void* shader_byte_code, size_t byte_code_size)
 {
@@ -89,31 +88,17 @@ bool GraphicsEngine::release()
     return true;
 }
 
-GraphicsEngine::~GraphicsEngine()
-{
-}
+GraphicsEngine::~GraphicsEngine() {}
 
-SwapChain* GraphicsEngine::createSwapChain()
-{
+SwapChain* GraphicsEngine::createSwapChain() { return new SwapChain(); }
 
-    return new SwapChain();
-}
+DeviceContext* GraphicsEngine::getImmediateDeviceContext() { return this->m_imm_device_context; }
 
-DeviceContext* GraphicsEngine::getImmediateDeviceContext()
-{
-    return this->m_imm_device_context;
-}
+VertexBuffer* GraphicsEngine::createVertexBuffer() { return new VertexBuffer(); }
 
-VertexBuffer* GraphicsEngine::createVertexBuffer()
-{
+ConstantBuffer* GraphicsEngine::createConstantBuffer() { return new ConstantBuffer(); }
 
-    return new VertexBuffer();
-}
-
-ConstantBuffer* GraphicsEngine::createConstantBuffer()
-{
-    return new ConstantBuffer();
-}
+IndexBuffer* GraphicsEngine::createIndexBuffer() { return new IndexBuffer(); }
 
 GraphicsEngine* GraphicsEngine::get()
 {
@@ -161,7 +146,4 @@ bool GraphicsEngine::compilePixelShader(const wchar_t* file_name, const char* en
     return true;
 }
 
-void GraphicsEngine::releaseCompiledShader()
-{
-    if (m_blob) m_blob->Release();
-}
+void GraphicsEngine::releaseCompiledShader() { if (m_blob) m_blob->Release(); }
