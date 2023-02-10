@@ -213,6 +213,18 @@ void AppWindow::onDestroy()
 	GraphicsEngine::get()->release();
 }
 
+void AppWindow::onFocus()
+{
+	InputSystem::get()->addListener(this);
+
+}
+
+void AppWindow::onKillFocus()
+{
+	InputSystem::get()->removeListener(this);
+
+}
+
 void AppWindow::onKeyDown(int key)
 {
 	if (key == 'W')
@@ -235,6 +247,14 @@ void AppWindow::onKeyDown(int key)
 
 void AppWindow::onKeyUp(int key)
 {
+
+}
+
+void AppWindow::onMouseMove(const Point& delta_mouse_pos)
+{
+	m_rot_x -= delta_mouse_pos.m_y * m_delta_time;
+	m_rot_y -= delta_mouse_pos.m_x * m_delta_time;
+
 
 }
 
