@@ -47,7 +47,7 @@ void AppWindow::updateQuadPosition()
 
 	//cc.m_world *= temp;
 
-	cc.m_world.setScale(Vector3D(1, 1, 1));
+	cc.m_world.setScale(Vector3D(m_scale_cube, m_scale_cube, m_scale_cube));
 
 	temp.setIdentity();
 	temp.setRotationZ(0.0f);
@@ -256,5 +256,24 @@ void AppWindow::onMouseMove(const Point& delta_mouse_pos)
 	m_rot_y -= delta_mouse_pos.m_x * m_delta_time;
 
 
+}
+
+void AppWindow::onLeftMouseButtonDown(const Point& mouse_pos)
+{
+	m_scale_cube -= .1f;
+}
+
+void AppWindow::onLeftMouseButtonUp(const Point& mouse_pos)
+{
+}
+
+void AppWindow::onRightMouseButtonDown(const Point& mouse_pos)
+{
+	m_scale_cube += .1f;
+
+}
+
+void AppWindow::onRightMouseButtonUp(const Point& mouse_pos)
+{
 }
 

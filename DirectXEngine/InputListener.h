@@ -15,4 +15,10 @@ public:
 	//Mouse
 	virtual void onMouseMove(const Point& delta_mouse_pos) = 0;
 	
+	virtual void onLeftMouseButtonDown(const Point& mouse_pos) = 0;
+	virtual void onLeftMouseButtonUp(const Point& mouse_pos) = 0;
+	
+	virtual void onRightMouseButtonDown(const Point& mouse_pos) = 0;
+	virtual void onRightMouseButtonUp(const Point& mouse_pos) = 0;
+
 };

@@ -28,9 +28,18 @@ public:
 	virtual void onKillFocus() override;
 
 	// Inherited via InputListener
+	// Keyboard
 	virtual void onKeyDown(int key) override;
 	virtual void onKeyUp(int key) override;
+	
+	// Mouse
 	virtual void onMouseMove(const Point& delta_mouse_pos) override;
+
+	virtual void onLeftMouseButtonDown(const Point& mouse_pos) override;
+	virtual void onLeftMouseButtonUp(const Point& mouse_pos) override;
+	
+	virtual void onRightMouseButtonDown(const Point& mouse_pos) override;
+	virtual void onRightMouseButtonUp(const Point& mouse_pos) override;
 
 
 private:
@@ -51,6 +60,8 @@ private:
 
 	float m_rot_x;
 	float m_rot_y;
+
+	float m_scale_cube = 1;
 
 };
 
