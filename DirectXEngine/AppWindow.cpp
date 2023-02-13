@@ -81,13 +81,21 @@ void AppWindow::update()
 	world_cam.inverse();
 
 	cc.m_view = world_cam;
+	int width = (this->getClientWindowRect().right - this->getClientWindowRect().left);
+	int height = (this->getClientWindowRect().bottom - this->getClientWindowRect().top);
+	
+	/*
 	cc.m_proj.setOrthoLH
 	(
-		(this->getClientWindowRect().right - this->getClientWindowRect().left) / 400.0f,
-		(this->getClientWindowRect().bottom - this->getClientWindowRect().top) / 400.0f,
+		width / 300.0f,
+		height / 300.0f,
 		-4.0f,
 		4.0f
 	);
+	*/
+
+
+	cc.m_proj.setPerspectiveFovLH(1.57f, ((float)width / (float)height), .1f, 100.0f);
 
 	m_cb->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
 
