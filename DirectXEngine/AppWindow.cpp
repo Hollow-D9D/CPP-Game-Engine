@@ -62,8 +62,25 @@ void AppWindow::update()
 	temp.setRotationX(m_rot_x);
 	cc.m_world *= temp;
 	*/
+	cc.m_world.setIdentity();
 
-	cc.m_view.setIdentity();
+	Matrix4x4 world_cam;
+	world_cam.setIdentity();
+
+	temp.setIdentity();
+	temp.setRotationX(m_rot_x);
+	world_cam *= temp;
+
+	temp.setIdentity();
+	temp.setRotationY(m_rot_y);
+	world_cam *= temp;
+
+	world_cam.setTranslation(Vector3D(0, 0, -2));
+
+
+	world_cam.inverse();
+
+	cc.m_view = world_cam;
 	cc.m_proj.setOrthoLH
 	(
 		(this->getClientWindowRect().right - this->getClientWindowRect().left) / 400.0f,
