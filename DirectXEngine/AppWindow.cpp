@@ -30,7 +30,7 @@ AppWindow::~AppWindow()
 {
 }
 
-void AppWindow::updateQuadPosition()
+void AppWindow::update()
 {
 	constant cc;
 	cc.m_time = ::GetTickCount();
@@ -47,6 +47,7 @@ void AppWindow::updateQuadPosition()
 
 	//cc.m_world *= temp;
 
+	/*
 	cc.m_world.setScale(Vector3D(m_scale_cube, m_scale_cube, m_scale_cube));
 
 	temp.setIdentity();
@@ -60,8 +61,7 @@ void AppWindow::updateQuadPosition()
 	temp.setIdentity();
 	temp.setRotationX(m_rot_x);
 	cc.m_world *= temp;
-
-
+	*/
 
 	cc.m_view.setIdentity();
 	cc.m_proj.setOrthoLH
@@ -174,7 +174,7 @@ void AppWindow::onUpdate()
 	RECT rc = this->getClientWindowRect();
 	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top);
 
-	updateQuadPosition();
+	update();
 
 	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(m_vs, m_cb);
 	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(m_ps, m_cb);
