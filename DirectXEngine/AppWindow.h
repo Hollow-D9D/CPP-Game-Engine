@@ -34,7 +34,7 @@ public:
 	virtual void onKeyUp(int key) override;
 	
 	// Mouse
-	virtual void onMouseMove(const Point& delta_mouse_pos) override;
+	virtual void onMouseMove(const Point& mouse_pos) override;
 
 	virtual void onLeftMouseButtonDown(const Point& mouse_pos) override;
 	virtual void onLeftMouseButtonUp(const Point& mouse_pos) override;

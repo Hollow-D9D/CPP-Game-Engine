@@ -13,7 +13,7 @@ public:
 	virtual void onKeyUp(int key) = 0;
 
 	//Mouse
-	virtual void onMouseMove(const Point& delta_mouse_pos) = 0;
+	virtual void onMouseMove(const Point& mouse_pos) = 0;
 	
 	virtual void onLeftMouseButtonDown(const Point& mouse_pos) = 0;
 	virtual void onLeftMouseButtonUp(const Point& mouse_pos) = 0;
