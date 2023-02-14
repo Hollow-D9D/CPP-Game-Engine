@@ -75,8 +75,13 @@ void AppWindow::update()
 	temp.setRotationY(m_rot_y);
 	world_cam *= temp;
 
-	world_cam.setTranslation(Vector3D(0, 0, -2));
+	Vector3D new_pos = m_world_cam.getTranslation() + world_cam.getZDirection() * (m_forward * .3f);
 
+	new_pos = new_pos + world_cam.getXDirection() * (m_rightward * .3f);
+	new_pos = new_pos + world_cam.getYDirection() * (m_upward * .3f);
+
+	world_cam.setTranslation(new_pos);
+	m_world_cam = world_cam;
 
 	world_cam.inverse();
 
@@ -110,7 +115,7 @@ void AppWindow::onCreate()
 	GraphicsEngine::get()->init();
 	m_swap_chain = GraphicsEngine::get()->createSwapChain();
 
-
+	m_world_cam.setTranslation(Vector3D(0, 0, -2));
 	RECT rc = this->getClientWindowRect();
 	m_swap_chain->init(this->m_hwnd, rc.right - rc.left, rc.bottom - rc.top);
 
@@ -254,24 +259,36 @@ void AppWindow::onKeyDown(int key)
 {
 	if (key == 'W')
 	{
-		m_rot_x += 0.707f * m_delta_time;
+		m_forward = 1.0f;
 	}
 	else if (key == 'S')
 	{
-		m_rot_x -= 0.707f * m_delta_time;
+		m_forward = -1.0f;
 	}
 	else if (key == 'D')
 	{
-		m_rot_y -= 0.707f * m_delta_time;
+		m_rightward = 1.0f;
 	}
 	else if (key == 'A')
 	{
-		m_rot_y += 0.707f * m_delta_time;
+		m_rightward = -1.0f;
 	}
+	else if (key == 'E')
+	{
+		m_upward = 1.0f;
+	}
+	else if (key == 'Q')
+	{
+		m_upward = -1.0f;
+	}
+
 }
 
 void AppWindow::onKeyUp(int key)
 {
+	m_forward = 0.0f;
+	m_rightward = 0.0f;
+	m_upward = 0.0f;
 
 }
 
