@@ -5,15 +5,12 @@
 class SwapChain
 {
 public:
-	SwapChain(RenderSystem* m_system);
 	//Initialize swapchain for a window
-	bool init(HWND hwnd, UINT width, UINT height);
+	SwapChain(HWND hwnd, UINT width, UINT height, RenderSystem* m_system);
 
 	bool present(bool vsync);
 
 	//Release the swapchain
-	bool release();
-
 	~SwapChain();
 private:
 	IDXGISwapChain* m_swap_chain;

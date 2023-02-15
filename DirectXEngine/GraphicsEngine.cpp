@@ -1,5 +1,6 @@
 #include "GraphicsEngine.h"
 #include "RenderSystem.h"
+#include <exception>
 
 
 GraphicsEngine::GraphicsEngine() {}
