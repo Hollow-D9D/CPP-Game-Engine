@@ -1,4 +1,5 @@
 #include "AppWindow.h"
+#include "InputSystem.h"
 
 
 int main()
@@ -6,19 +7,22 @@ int main()
 	try
 	{
 		GraphicsEngine::create();
+		InputSystem::create();
 	}
 	catch (...)	{ return -1; }
-
-	AppWindow app;
-	if (app.init())
+	try
 	{
-		while (app.isRun())
-		{
-			app.broadcast();
-		}
+		AppWindow app;
+
+		while (app.isRun());
 	}
-	
+	catch (...) {
+		GraphicsEngine::release();
+		InputSystem::release();
+		return -1;
+	}
 	GraphicsEngine::release();
+	InputSystem::release();
 
 	return 0;
 }

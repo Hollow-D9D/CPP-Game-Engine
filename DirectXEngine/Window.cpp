@@ -1,51 +1,45 @@
 #include "Window.h"
-
-
-Window::Window() {}
-Window::~Window() {}
+#include <exception>
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	switch (msg)
 	{
-		case WM_CREATE:
-		{
-			// Event fired when the window will be created
-			Window* window = (Window*)((LPCREATESTRUCT)lparam)->lpCreateParams;
-			SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)window);
-			window->setHWND(hwnd);
-			window->onCreate();
-			break;
-		}
-		case WM_SETFOCUS:
-		{
-			// Event fired when the window will gain focus
-			Window* window = (Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
-			window->onFocus();
-			break;
-		}
-		case WM_KILLFOCUS:
-		{
-			// Event fired when the window will lose focus
-			Window* window = (Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
-			window->onKillFocus();
-			break;
-		}
+	case WM_CREATE:
+	{
+		break;
+	}
+	case WM_SETFOCUS:
+	{
+		// Event fired when the window will gain focus
+		Window* window = (Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
+		if (window) window->onFocus();
+		break;
+	}
+	case WM_KILLFOCUS:
+	{
+		// Event fired when the window will lose focus
+		Window* window = (Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
+		window->onKillFocus();
+		break;
+	}
 
-		case WM_DESTROY:
-		{
-			// Event fired when the window will be destroyed
-			Window* window = (Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
-			window->onDestroy();
-			::PostQuitMessage(0);
-			break;
-		}
-		default:
-			return ::DefWindowProc(hwnd, msg, wparam, lparam);
+	case WM_DESTROY:
+	{
+		// Event fired when the window will be destroyed
+		Window* window = (Window*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
+		window->onDestroy();
+		::PostQuitMessage(0);
+		break;
+	}
+	default:
+		return ::DefWindowProc(hwnd, msg, wparam, lparam);
 	}
 	return NULL;
 }
-bool Window::init()
+
+
+Window::Window() 
 {
 	//Setting up WNDCLASSEX object
 	WNDCLASSEX wc;
@@ -60,46 +54,58 @@ bool Window::init()
 	wc.lpszClassName = L"MyWindowClass";
 	wc.lpszMenuName = L"";
 	wc.style = NULL;
-	wc.lpfnWndProc = &WndProc ;
+	wc.lpfnWndProc = &WndProc;
 
-	if(!::RegisterClassEx(&wc)) // if the registration of class will fail, the function will return false
-		return false;
-	
-	
+	if (!::RegisterClassEx(&wc)) // if the registration of class will fail, the function will return false
+		throw std::exception("Couldn't create the window");
+
+
 	//Creation of the window
 	m_hwnd = ::CreateWindowEx(
-			WS_EX_OVERLAPPEDWINDOW,
-			L"MyWindowClass",
-			L"DirectX Application",
-			WS_CAPTION|WS_SYSMENU,
-			CW_USEDEFAULT,
-			CW_USEDEFAULT,
-			1024,
-			768,
-			NULL,
-			NULL,
-			NULL,
-			this
-		);
-	
+		WS_EX_OVERLAPPEDWINDOW,
+		L"MyWindowClass",
+		L"DirectX Application",
+		WS_CAPTION | WS_SYSMENU,
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		1024,
+		768,
+		NULL,
+		NULL,
+		NULL,
+		NULL
+	);
+
 	//if the creation fail return false
 	if (!m_hwnd)
-		return false;
+		throw std::exception("Couldn't create the window");
 
 	//show up the window
 	::ShowWindow(m_hwnd, SW_SHOW);
 	::UpdateWindow(m_hwnd);
 
-	
+
 	//set this flag to true to indicate that the window is initialized and running
 	m_is_run = true;
-	return true;
 }
+Window::~Window()
+{
+	//Destroy the window
+	if (!::DestroyWindow(m_hwnd))
+		throw std::exception("Couldn't destroy the Window");
+}
+
 
 bool Window::broadcast()
 {
 	MSG msg;
 
+	if (!this->m_is_init)
+	{
+		SetWindowLongPtr(m_hwnd, GWLP_USERDATA, (LONG_PTR)this);
+		this->onCreate();
+		this->m_is_init = true;
+	}
 
 	this->onUpdate();
 
@@ -114,16 +120,10 @@ bool Window::broadcast()
 	return true;
 }
 
-bool Window::release()
-{
-	//Destroy the window
-	if (!::DestroyWindow(m_hwnd))
-		return false;
-	return true;
-}
-
 bool Window::isRun()
 {
+	if (m_is_run)
+		broadcast();
 	return m_is_run;
 }
 
@@ -132,11 +132,6 @@ RECT Window::getClientWindowRect()
 	RECT rc;
 	::GetClientRect(this->m_hwnd, &rc);
 	return rc;
-}
-
-void Window::setHWND(HWND hwnd)
-{
-	this->m_hwnd = hwnd;
 }
 
 void Window::onCreate()
