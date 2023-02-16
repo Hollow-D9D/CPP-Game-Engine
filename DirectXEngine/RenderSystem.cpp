@@ -9,10 +9,7 @@
 #include <d3dcompiler.h>
 #include <exception>
 
-RenderSystem::RenderSystem() {}
-
-
-bool RenderSystem::init()
+RenderSystem::RenderSystem() 
 {
     D3D_DRIVER_TYPE driver_types[] =
     {
@@ -47,8 +44,10 @@ bool RenderSystem::init()
         ++driver_type_index;
     }
     if (FAILED(res))
-        return false;
-
+    {
+        throw std::exception("Render System not created successfully");
+    }
+        
     m_imm_device_context = std::make_shared<DeviceContext>(m_imm_context, this);
 
 
@@ -58,13 +57,10 @@ bool RenderSystem::init()
     m_dxgi_adapter->GetParent(__uuidof(IDXGIFactory), (void**)&m_dxgi_factory);
 
 
-    return true;
 }
 
-bool RenderSystem::release()
+RenderSystem::~RenderSystem() 
 {
-    if (m_vs)m_vs->Release();
-    if (m_ps)m_ps->Release();
 
     if (m_vsblob) m_vsblob->Release();
     if (m_psblob) m_psblob->Release();
@@ -74,10 +70,7 @@ bool RenderSystem::release()
     m_dxgi_factory->Release();
 
     m_d3d_device->Release();
-    return true;
 }
-
-RenderSystem::~RenderSystem() {}
 
 SwapChainPtr RenderSystem::createSwapChain(HWND hwnd, UINT width, UINT height)
 { 

@@ -5,13 +5,10 @@
 class RenderSystem
 {
 public:
+	//Initialize the GraphicsEngine and DirectX 11 Device
 	RenderSystem();
 
-	//Initialize the GraphicsEngine and DirectX 11 Device
-	bool init();
 	//Release all resources loaded
-	bool release();
-
 	~RenderSystem();
 
 public:
